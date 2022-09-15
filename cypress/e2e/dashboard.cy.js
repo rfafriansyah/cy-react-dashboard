@@ -45,4 +45,34 @@ describe("Test Cases -> Dashboard Page", () => {
       .should("have.css", "background-color", "rgb(79, 70, 229)")
       .and("have.css", "color", "rgb(255, 255, 255)");
   });
+
+  it("Upload Some Photos", () => {
+    const photos = [
+      {
+        imageValues:
+          "https://www.gardeningknowhow.com/ornamental/trees/italian-cypress/growing-italian-cypress-trees.htm",
+        descriptionValues: "Image1:Lorem Ipsum",
+      },
+      {
+        imageValues:
+          "https://3dwarehouse.sketchup.com/model/c28f011c3ad141f68d1fe8cdc415f4c5/Cypress",
+        descriptionValues: "Image2:lorem ipsum",
+      },
+    ];
+
+    photos.forEach(({ imageValues, descriptionValues }) => {
+      cy.get("input[name='image']").type(imageValues);
+
+      cy.get("input[name='desc']").type(descriptionValues);
+
+      cy.get("button[type='submit']").click();
+
+      //check apakah foto dan deskripsi sudah ke upload?
+      cy.get("img").should("have.attr", "src", imageValues);
+      cy.contains(descriptionValues);
+    });
+
+    //check jumlah foto yang ke upload
+    cy.contains(`Found ${photos.length} photos`);
+  });
 });
